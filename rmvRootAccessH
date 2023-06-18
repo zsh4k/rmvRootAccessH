@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# Ruta del archivo de configuración
+config_file="/etc/ssh/sshd_config"
+
+# Comprobamos si el archivo existe
+if [ ! -f "$config_file" ]; then
+    echo "El archivo de configuración $config_file no existe."
+    exit 1
+fi
+
+# Cambiar PermitRootLogin a 'no'
+sed -i 's/^PermitRootLogin yes/PermitRootLogin no/' "$config_file"
+
+# Cambiar UsePAM a 'no'
+sed -i 's/^UsePAM yes/UsePAM no/' "$config_file"
+
+# Cambiar PasswordAuthentication a 'no'
+sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication no/' "$config_file"
+
+# Cambiar el puerto a 44
+sed -i 's/^#Port 22/Port 44/' "$config_file"
+
+echo "Se han realizado los cambios en $config_file."
+
+service ssh restart
